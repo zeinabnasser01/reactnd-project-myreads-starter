@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import * as BooksAPI from "./BooksAPI";
 import Book from "./Book";
+import { debounce } from "throttle-debounce";
 
 class BooksSearch extends Component {
   state = {
@@ -13,41 +14,45 @@ class BooksSearch extends Component {
   handleSearch = (e) => {
     e.preventDefault();
     const query = e.target.value;
-
     this.setState(() => ({
       query: query.trim(),
     }));
 
-    if (query.length > 0) {
-      BooksAPI.search(query).then((books) => {
-        if (books.error) {
-          this.setState({ showingBooks: [] });
-          alert("books not found");
-        } else {
-          this.setState({
-            showingBooks: books.filter((b) =>
-              b.title.toLowerCase().includes(query.toLowerCase())
-            ),
-          });
-        }
-      });
-    } else {
-      this.setState(() => ({
-        showingBooks: [],
-      }));
-    }
+    const debounceFunc = debounce(300, false, (query) => {
+      console.log(query);
+      if (query.length > 0) {
+        BooksAPI.search(query).then((books) => {
+          if (books.error) {
+            this.setState({ showingBooks: [] });
+            alert("books not found");
+          } else {
+            this.setState({
+              showingBooks: books,
+            });
+          }
+        });
+      } else {
+        this.setState(() => ({
+          showingBooks: [],
+        }));
+      }
+    });
+
+    debounceFunc(query);
   };
 
   updateBook = (book, shelf) => {
     const books = [...this.state.showingBooks];
+
+    const selectedBook = books[books.indexOf(book)];
+    selectedBook.shelf = shelf;
     if (this.props.onUpdateState) {
-      console.log(books);
-      this.props.onUpdateState(books);
+      console.log(book);
+      this.props.onUpdateState(selectedBook);
     }
-    books[books.indexOf(book)].shelf = shelf;
-    this.setState({
-      showingBooks: books,
-    });
+    // this.setState({
+    //   books: books,
+    // });
     BooksAPI.update(book, shelf);
   };
 
