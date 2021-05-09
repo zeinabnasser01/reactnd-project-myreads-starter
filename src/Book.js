@@ -11,7 +11,9 @@ class Book extends Component {
             style={{
               width: 128,
               height: 193,
-              backgroundImage: `url(${book.imageLinks.smallThumbnail})`,
+              backgroundImage: `url(${
+                book.imageLinks ? book.imageLinks.smallThumbnail : undefined
+              })`,
             }}
           />
           <div className="book-shelf-changer">
@@ -33,7 +35,9 @@ class Book extends Component {
           </div>
         </div>
         <div className="book-title">{book.title}</div>
-        <div className="book-authors">{book.authors}</div>
+        <div className="book-authors">
+          {book.authors ? book.authors : "authors not found"}
+        </div>
       </div>
     );
   }
