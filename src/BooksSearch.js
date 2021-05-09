@@ -26,6 +26,8 @@ class BooksSearch extends Component {
             this.setState({ showingBooks: [] });
             alert("books not found");
           } else {
+            books.map((book) => (book.shelf = "none"));
+
             this.setState({
               showingBooks: books,
             });
@@ -50,9 +52,6 @@ class BooksSearch extends Component {
       console.log(book);
       this.props.onUpdateState(selectedBook);
     }
-    // this.setState({
-    //   books: books,
-    // });
     BooksAPI.update(book, shelf);
   };
 
