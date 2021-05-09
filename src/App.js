@@ -1,10 +1,12 @@
 import React from "react";
 import * as BooksAPI from "./BooksAPI";
 import "./App.css";
+
 import { Route, Switch } from "react-router-dom";
 import BooksList from "./BooksList";
 import BooksSearch from "./BooksSearch";
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 class BooksApp extends React.Component {
   state = {
     books: [],
@@ -37,6 +39,7 @@ class BooksApp extends React.Component {
     const { books } = this.state;
     return (
       <div className="app">
+        <ToastContainer />
         <Switch>
           <Route path="/search">
             <BooksSearch

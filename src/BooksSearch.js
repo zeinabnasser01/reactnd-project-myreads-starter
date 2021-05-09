@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import * as BooksAPI from "./BooksAPI";
 import Book from "./Book";
 import { debounce } from "throttle-debounce";
+import { toast } from "react-toastify";
 
 class BooksSearch extends Component {
   state = {
@@ -51,6 +52,9 @@ class BooksSearch extends Component {
     if (this.props.onUpdateState) {
       console.log(book);
       this.props.onUpdateState(selectedBook);
+      toast.success(`${book.title}is added to your ${book.shelf} shelf`, {
+        position: "bottom-right",
+      });
     }
     BooksAPI.update(book, shelf);
   };
