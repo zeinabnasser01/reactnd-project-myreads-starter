@@ -27,7 +27,9 @@ class BooksSearch extends Component {
             this.setState({ showingBooks: [] });
             alert("books not found");
           } else {
-            books.map((book) => (book.shelf = "none"));
+            books
+              .filter((book) => book.shelf === undefined)
+              .map((book) => (book.shelf = "none"));
 
             this.setState({
               showingBooks: books,
