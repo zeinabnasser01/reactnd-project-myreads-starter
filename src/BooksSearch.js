@@ -10,6 +10,7 @@ class BooksSearch extends Component {
     showingBooks: [],
     query: "",
     books: this.props.books,
+    book: {},
   };
 
   handleSearch = (e) => {
@@ -27,13 +28,10 @@ class BooksSearch extends Component {
             this.setState({ showingBooks: [] });
             alert("books not found");
           } else {
-            books
-              .filter((book) => book.shelf === undefined)
-              .map((book) => (book.shelf = "none"));
-
             this.setState({
               showingBooks: books,
             });
+            console.log(this.state.showingBooks);
           }
         });
       } else {
@@ -58,6 +56,7 @@ class BooksSearch extends Component {
         position: "bottom-right",
       });
     }
+
     BooksAPI.update(book, shelf);
   };
 
@@ -86,12 +85,7 @@ class BooksSearch extends Component {
               <ol className="books-grid">
                 {showingBooks.map((book) => (
                   <li key={book.id}>
-                    <Book
-                      book={book}
-                      onUpdateBook={(book, shelf) =>
-                        this.updateBook(book, shelf)
-                      }
-                    />
+                    <Book book={book} onUpdateBook={this.updateBook} />
                   </li>
                 ))}
               </ol>
